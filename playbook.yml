@@ -1,9 +1,15 @@
 ---
 
-- name: Ansible Playbook for configuring brand new Raspberry Pi
-
-  hosts: webservers
+- hosts: webservers
+  name: Ansible Playbook for configuring the webserver with InfluxDB and Grafana
   roles:
-    - pi
+    - grafana
+  remote_user: pi
+  become: yes
+
+- hosts: nodes
+  name: Ansible Playbook for configuring nodes
+  roles:
+    - nodes
   remote_user: pi
   become: yes
