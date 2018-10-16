@@ -1,0 +1,112 @@
+- set_fact:
+    real_ansible_host: "{{ ansible_host }}"
+
+
+- name: remove senddata.py exec to rc.local
+  lineinfile:
+    path: /etc/rc.local
+    regexp: '^python3 /home/pi/senddata.py'
+    owner: root
+    group: root
+    mode: a+x
+    state: absent
+
+- name: write senddata.py exec to rc.local
+  lineinfile:
+    path: /etc/rc.local
+    line: 'python3 /home/pi/senddata.py "/home/pi/config.ini" &'
+    insertbefore: '^exit'   
+    owner: root
+    group: root
+    mode: a+x
+
+- name: Set influxserver host
+  ini_file:
+    path: /home/pi/config.ini
+    section: influxserver
+    option: host
+    value: 192.168.178.54
+    backup: yes
+
+- name: Set influxserver port
+  ini_file:
+    path: /home/pi/config.ini
+    section: influxserver
+    option: port
+    value: 8086
+    backup: yes
+
+- name: Set influxserver user
+  ini_file:
+    path: /home/pi/config.ini
+    section: influxserver
+    option: user
+    value: root
+    backup: yes
+
+- name: Set influxserver dbname
+  ini_file:
+    path: /home/pi/config.ini
+    section: influxserver
+    option: dbname
+    value: logger
+    backup: yes
+
+- name: Set sensor session
+  ini_file:
+    path: /home/pi/config.ini
+    section: sensor
+    option: session
+    value: dev
+    backup: yes
+
+- name: Set sensor location
+  ini_file:
+    path: /home/pi/config.ini
+    section: sensor
+    option: location
+    value: livingroom
+    backup: yes
+
+- name: Set sensor enable_gas
+  ini_file:
+    path: /home/pi/config.ini
+    section: sensor
+    option: enable_gas
+    value: yes
+    backup: yes
+
+- name: Set sensor temp_offset
+  ini_file:
+    path: /home/pi/config.ini
+    section: sensor
+    option: temp_offset
+    value: -3.5
+    backup: yes
+
+- name: Set sensor interval
+  ini_file:
+    path: /home/pi/config.ini
+    section: sensor
+    option: interval
+    value: 5
+    backup: yes
+
+- name: Set sensor burn_in_time
+  ini_file:
+    path: /home/pi/config.ini
+    section: sensor
+    option: burn_in_time
+    value: 500
+    backup: yes
+  
+- name: 'Reboot'
+  shell: sleep 2 && reboot
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: "Wait for Raspberry PI to come back"
+  local_action: wait_for host={{ real_ansible_host }} port=22 state=started delay=10
+  become: false
+

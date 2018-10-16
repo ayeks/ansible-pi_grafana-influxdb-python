@@ -1,0 +1,8 @@
+---
+
+- hosts: testnode
+  name: Nodetest playbook
+  remote_user: pi
+  become: yes
+  roles:
+    - nodes
