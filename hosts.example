@@ -9,7 +9,7 @@
 influxserver_host=192.168.178.54
 influxserver_port=8086
 influxserver_user=root
-influxserver_password=root
+influxserver_password=NOTSOSECUREHERE
 influxserver_dbname=logger
 sensor_session=dev
 sensor_enable_gas=True
