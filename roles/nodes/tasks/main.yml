@@ -25,7 +25,7 @@
     path: /home/pi/config.ini
     section: influxserver
     option: host
-    value: 192.168.178.54
+    value: "{{ hostvars[ansible_host]['influxserver_host'] }}"
     backup: yes
 
 - name: Set influxserver port
@@ -33,7 +33,7 @@
     path: /home/pi/config.ini
     section: influxserver
     option: port
-    value: 8086
+    value: "{{ hostvars[ansible_host]['influxserver_port'] }}"
     backup: yes
 
 - name: Set influxserver user
@@ -41,7 +41,15 @@
     path: /home/pi/config.ini
     section: influxserver
     option: user
-    value: root
+    value: "{{ hostvars[ansible_host]['influxserver_user'] }}"
+    backup: yes
+
+- name: Set influxserver password - not a good idea.. FIXME TODO
+  ini_file:
+    path: /home/pi/config.ini
+    section: influxserver
+    option: password
+    value: "{{ hostvars[ansible_host]['influxserver_password'] }}"
     backup: yes
 
 - name: Set influxserver dbname
@@ -49,7 +57,7 @@
     path: /home/pi/config.ini
     section: influxserver
     option: dbname
-    value: logger
+    value: "{{ hostvars[ansible_host]['influxserver_dbname'] }}"
     backup: yes
 
 - name: Set sensor session
@@ -57,7 +65,7 @@
     path: /home/pi/config.ini
     section: sensor
     option: session
-    value: dev
+    value: "{{ hostvars[ansible_host]['sensor_session'] }}"
     backup: yes
 
 - name: Set sensor location
@@ -65,7 +73,7 @@
     path: /home/pi/config.ini
     section: sensor
     option: location
-    value: livingroom
+    value: "{{ hostvars[ansible_host]['sensor_location'] }}"
     backup: yes
 
 - name: Set sensor enable_gas
@@ -73,7 +81,7 @@
     path: /home/pi/config.ini
     section: sensor
     option: enable_gas
-    value: yes
+    value: "{{ hostvars[ansible_host]['sensor_enable_gas'] }}"
     backup: yes
 
 - name: Set sensor temp_offset
@@ -81,7 +89,7 @@
     path: /home/pi/config.ini
     section: sensor
     option: temp_offset
-    value: -3.5
+    value: "{{ hostvars[ansible_host]['sensor_temp_offset'] }}"
     backup: yes
 
 - name: Set sensor interval
@@ -89,7 +97,7 @@
     path: /home/pi/config.ini
     section: sensor
     option: interval
-    value: 5
+    value: "{{ hostvars[ansible_host]['sensor_interval'] }}"
     backup: yes
 
 - name: Set sensor burn_in_time
@@ -97,7 +105,7 @@
     path: /home/pi/config.ini
     section: sensor
     option: burn_in_time
-    value: 500
+    value: "{{ hostvars[ansible_host]['sensor_burn_in_time'] }}"
     backup: yes
   
 - name: 'Reboot'
