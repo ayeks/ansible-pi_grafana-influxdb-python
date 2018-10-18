@@ -1,11 +1,16 @@
 - set_fact:
     real_ansible_host: "{{ ansible_host }}"
 
+- name: git clone repository
+  git:
+    repo: 'https://github.com/ayeks/bme680_to_influxdb'
+    dest: /home/pi/bme680/
+    force: yes
 
-- name: remove senddata.py exec to rc.local
+- name: remove python exec to rc.local
   lineinfile:
     path: /etc/rc.local
-    regexp: '^python3 /home/pi/senddata.py'
+    regexp: '^python3 /home/'
     owner: root
     group: root
     mode: a+x
@@ -14,7 +19,7 @@
 - name: write senddata.py exec to rc.local
   lineinfile:
     path: /etc/rc.local
-    line: 'python3 /home/pi/senddata.py "/home/pi/config.ini" &'
+    line: 'python3 /home/pi/bme680/senddata.py "/home/pi/bme680/config.ini" &'
     insertbefore: '^exit'   
     owner: root
     group: root
@@ -22,7 +27,7 @@
 
 - name: Set influxserver host
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: influxserver
     option: host
     value: "{{ hostvars[ansible_host]['influxserver_host'] }}"
@@ -30,7 +35,7 @@
 
 - name: Set influxserver port
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: influxserver
     option: port
     value: "{{ hostvars[ansible_host]['influxserver_port'] }}"
@@ -38,7 +43,7 @@
 
 - name: Set influxserver user
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: influxserver
     option: user
     value: "{{ hostvars[ansible_host]['influxserver_user'] }}"
@@ -46,7 +51,7 @@
 
 - name: Set influxserver password - not a good idea.. FIXME TODO
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: influxserver
     option: password
     value: "{{ hostvars[ansible_host]['influxserver_password'] }}"
@@ -54,7 +59,7 @@
 
 - name: Set influxserver dbname
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: influxserver
     option: dbname
     value: "{{ hostvars[ansible_host]['influxserver_dbname'] }}"
@@ -62,7 +67,7 @@
 
 - name: Set sensor session
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: sensor
     option: session
     value: "{{ hostvars[ansible_host]['sensor_session'] }}"
@@ -70,7 +75,7 @@
 
 - name: Set sensor location
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: sensor
     option: location
     value: "{{ hostvars[ansible_host]['sensor_location'] }}"
@@ -78,7 +83,7 @@
 
 - name: Set sensor enable_gas
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: sensor
     option: enable_gas
     value: "{{ hostvars[ansible_host]['sensor_enable_gas'] }}"
@@ -86,7 +91,7 @@
 
 - name: Set sensor temp_offset
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: sensor
     option: temp_offset
     value: "{{ hostvars[ansible_host]['sensor_temp_offset'] }}"
@@ -94,7 +99,7 @@
 
 - name: Set sensor interval
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: sensor
     option: interval
     value: "{{ hostvars[ansible_host]['sensor_interval'] }}"
@@ -102,7 +107,7 @@
 
 - name: Set sensor burn_in_time
   ini_file:
-    path: /home/pi/config.ini
+    path: /home/pi/bme680/config.ini
     section: sensor
     option: burn_in_time
     value: "{{ hostvars[ansible_host]['sensor_burn_in_time'] }}"
@@ -118,3 +123,7 @@
   local_action: wait_for host={{ real_ansible_host }} port=22 state=started delay=10
   become: false
 
+- name: "Check if rc-local service is running"
+  service: name=rc-local state=started
+  become: yes
+  become_method: sudo

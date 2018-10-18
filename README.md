@@ -1,18 +1,17 @@
 # Provision Grafana, InfluxDB and Python Scripts to multiple RaspberryPIs with Ansible
 
-This repository is an fork of [ansible-pi](https://github.com/motdotla/ansible-pi), which is a nice starting point for Ansible automation. I use it for automating my sensor setup which consists of 2 RaspberryPI Zero W with a BME680 environmental sensor and one RaspberryPI 3 as webserver. Feel free to have a look at my [blogpost](https://ayeks.de/2018/05/bme680-influxdb-grafana/) for more information on that.
+This repository is an fork of [ansible-pi](https://github.com/motdotla/ansible-pi), which is a nice starting point for Ansible automation. I use it for automating my sensor setup which consists of 2 RaspberryPI Zero W with a BME680 environmental sensor running [bme680_to_influxdb](https://github.com/ayeks/bme680_to_influxdb) and one RaspberryPI 3 as webserver for InfluxDB and Grafana. Feel free to have a look at my [blogpost](https://ayeks.de/2018/05/bme680-influxdb-grafana/) for more information on that.
 
 **Whats included in this repository?**
 
 * 3 playbooks to provision multiple RaspberryPIs
 * apt update & upgrade & reboot your PIs
 * start the Grafana service
-* make a python script starting on boot and write an .ini file
+* git clone a python script, execute it on boot and write an .ini file
 
 **What will be provided in this repository soon?**
 
 * install InfluxDB and Grafana using one command
-* download a python script
 
 ## Usage
 
@@ -115,9 +114,9 @@ TASK [nodes : set_fact] ********************************************************
 ok: [192.168.178.66]
 ok: [192.168.178.73]
 
-TASK [nodes : remove senddata.py exec to rc.local] *************************************************************************************************************************
-changed: [192.168.178.66]
+TASK [nodes : git clone repository] ****************************************************************************************************************************************
 changed: [192.168.178.73]
+changed: [192.168.178.66]
 
 TASK [nodes : write senddata.py exec to rc.local] **************************************************************************************************************************
 changed: [192.168.178.66]
@@ -175,9 +174,15 @@ TASK [nodes : Wait for Raspberry PI to come back] ******************************
 ok: [192.168.178.66 -> localhost]
 ok: [192.168.178.73 -> localhost]
 
+
+TASK [nodes : Check if rc-local service is running] ************************************************************************************************************************
+ok: [192.168.178.66]
+ok: [192.168.178.73]
+
+
 PLAY RECAP *****************************************************************************************************************************************************************
 192.168.178.54             : ok=9    changed=3    unreachable=0    failed=0   
-192.168.178.66             : ok=23   changed=6    unreachable=0    failed=0   
-192.168.178.73             : ok=23   changed=6    unreachable=0    failed=0   
+192.168.178.66             : ok=24   changed=7    unreachable=0    failed=0   
+192.168.178.73             : ok=24   changed=7    unreachable=0    failed=0   
 
 ```
