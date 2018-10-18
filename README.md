@@ -1,6 +1,6 @@
-# Provision Grafana, InfluxDB and Python Scripts to 3 RaspberryPIs with Ansible
+# Provision Grafana, InfluxDB and Python Scripts to multiple RaspberryPIs with Ansible
 
-This repository is an fork of [ansible-pi](https://github.com/motdotla/ansible-pi), which is a nice starting point for Ansible automation.
+This repository is an fork of [ansible-pi](https://github.com/motdotla/ansible-pi), which is a nice starting point for Ansible automation. I use it for automating my sensor setup which consists of 2 RaspberryPI Zero W with a BME680 environmental sensor and one RaspberryPI 3 as webserver. Feel free to have a look at my [blogpost](https://ayeks.de/2018/05/bme680-influxdb-grafana/) for more information on that.
 
 **Whats included in this repository?**
 
@@ -54,7 +54,9 @@ If you just want to execute all playbooks run:
 ansible-playbook playbook.yml -i hosts --ask-pass --become -c paramiko
 ```
 
-Which results in the following output for my setup:
+## Example
+
+Running everything together looks like that:
 
 ```
 $ ansible-playbook playbook.yml -i hosts --ask-pass --become -c paramiko
