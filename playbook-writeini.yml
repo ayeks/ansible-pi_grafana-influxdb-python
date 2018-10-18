@@ -1,7 +1,7 @@
 ---
 
-- hosts: testnode
-  name: Nodetest playbook
+- hosts: nodes
+  name: Write config.ini and reboot playbook
   remote_user: pi
   become: yes
   roles:
