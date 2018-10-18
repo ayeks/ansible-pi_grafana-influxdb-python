@@ -1,15 +1,6 @@
 ---
 
-- hosts: webservers
-  name: Ansible Playbook for configuring the webserver with InfluxDB and Grafana
-  roles:
-    - grafana
-  remote_user: pi
-  become: yes
+- import_playbook: playbook-update.yml
+- import_playbook: playbook-setup-webserver.yml
+- import_playbook: playbook-setup-node.yml
 
-- hosts: nodes
-  name: Ansible Playbook for configuring nodes
-  roles:
-    - nodes
-  remote_user: pi
-  become: yes
