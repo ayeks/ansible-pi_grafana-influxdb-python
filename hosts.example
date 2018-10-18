@@ -1,0 +1,18 @@
+[webservers]
+192.168.178.54
+
+[nodes]
+192.168.178.66 sensor_location=livingroom
+192.168.178.73 sensor_location=bedroom
+
+[nodes:vars]
+influxserver_host=192.168.178.54
+influxserver_port=8086
+influxserver_user=root
+influxserver_password=root
+influxserver_dbname=logger
+sensor_session=dev
+sensor_enable_gas=True
+sensor_temp_offset=-3.5
+sensor_interval=5
+sensor_burn_in_time=500
